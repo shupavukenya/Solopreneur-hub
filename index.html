@@ -227,37 +227,65 @@
         function closeModal() { document.getElementById('deal-modal').classList.add('hidden'); }
 
         // Step 1: Create client as 'Pending / New' status inside pipeline
-        function submitPipelineDeal() {
-            const name = document.getElementById('deal-name').value.trim();
-            const items = document.getElementById('deal-items').value.trim();
-            const value = parseFloat(document.getElementById('deal-value').value);
+        
+async function submitPipelineDeal() {
+    // 1. Grab the standard deal details
+    const dealName = document.getElementById('dealName').value;
+    const dealValue = parseFloat(document.getElementById('dealValue').value);
+    const dealItems = document.getElementById('dealItems').value;
 
-            if(!name || !items || isNaN(value)) {
-                alert("Please fill all pipeline metrics validly.");
-                return;
-            }
+    // 2. Grab the new customer input fields for Pesapal
+    const firstName = document.getElementById('customerFirstName').value;
+    const lastName = document.getElementById('customerLastName').value;
+    const email = document.getElementById('customerEmail').value;
+    const phone = document.getElementById('customerPhone').value;
 
-            const newDeal = {
-                id: Date.now(),
-                name: name,
-                items: items,
-                value: value,
-                status: 'pending'
-            };
+    // Simple validation to ensure we have the required details
+    if (!dealName || isNaN(dealValue) || !email || !phone) {
+        alert("Please fill in all required fields (Deal Name, Value, Email, and Phone).");
+        return;
+    }
 
-            state.deals.push(newDeal);
-            updateUI();
-            closeModal();
-            logMessage(`Pipeline registered: Client "${name}" created with Status: PENDING.`);
+    // 3. Create the new deal object with a 'Pending' payment status
+    const newDeal = {
+        name: dealName,
+        value: dealValue,
+        items: dealItems,
+        customer: {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            phone: phone
+        },
+        paymentStatus: 'Pending',
+        createdAt: new Date().toISOString()
+    };
 
-            // Step 2: Directly trigger checkout routine automatically right after registering
-            executePesaPalPayment(newDeal.id, newDeal.value);
-            
-            // Cleanup input fields
-            document.getElementById('deal-name').value = '';
-            document.getElementById('deal-items').value = '';
-            document.getElementById('deal-value').value = '';
+    console.log("Saving pending deal to pipeline...", newDeal);
+
+    try {
+        // 4. Save the pending deal to your database/backend
+        const response = await fetch('/api/deals', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newDeal),
+        });
+
+        const savedDeal = await response.json();
+
+        if (response.ok) {
+            // 5. Trigger the next step: Initiate the Pesapal payment redirect
+            initiatePesapalPayment(savedDeal);
+        } else {
+            alert("Failed to save the deal: " + savedDeal.message);
         }
+    } catch (error) {
+        console.error("Error creating pending deal:", error);
+        alert("An error occurred while saving the deal.");
+    }
+}
 
         // Step 3: Call authentication API workflow simulation
         async function executePesaPalPayment(dealId, value) {
