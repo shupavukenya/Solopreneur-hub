@@ -3,139 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoloHub OS - Dashboard</title>
+    <title>Shupavu Ride - Partner Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body {
-            background-color: #0B0F19;
-        }
-    </style>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="text-slate-200 min-h-screen p-4 md:p-8">
+<body class="bg-slate-50 text-slate-800 font-sans pb-12">
 
-    <!-- Top Navigation / Header -->
-    <header class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-            <h1 class="text-3xl font-extrabold tracking-tight text-white">SoloHub <span class="text-emerald-400">OS</span></h1>
-            <p class="text-slate-400 text-sm mt-1">One dashboard. Your entire business operations.</p>
-        </div>
-        <div class="flex gap-2">
-            <button onclick="openModal('taskModal')" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm transition-all shadow-lg shadow-emerald-500/10">
-                + New Task
-            </button>
-            <button onclick="openModal('leadModal')" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-medium px-4 py-2 rounded-lg text-sm transition-all">
-                + Add Lead
-            </button>
+    <header class="bg-blue-600 text-white shadow-md sticky top-0 z-10">
+        <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i data-lucide="steering-wheel" class="w-6 h-6"></i>
+                <span class="font-bold text-lg tracking-wide">Shupavu Ride</span>
+            </div>
+            <span class="bg-blue-500 text-xs px-2 py-1 rounded-full font-semibold">Partner Panel</span>
         </div>
     </header>
 
-    <!-- Main Workspace Grid -->
-    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <main class="max-w-md mx-auto px-4 mt-6 space-y-6">
 
-        <!-- Column 1: Active Focus Tasks -->
-        <section class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 backdrop-blur-md">
-            <h2 class="text-lg font-bold text-white mb-4 flex items-center justify-between">
-                <span>Daily Focus</span>
-                <span id="taskCount" class="text-xs bg-slate-800 text-emerald-400 px-2.5 py-0.5 rounded-full font-semibold">0 Active</span>
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+            <h2 class="text-lg font-bold flex items-center gap-2 mb-4">
+                <i data-lucide="wallet" class="text-blue-600 w-5 h-5"></i>
+                Financial Tracker
             </h2>
-            <div id="taskList" class="space-y-3">
-                <!-- Tasks will load here dynamically -->
-            </div>
-        </section>
-
-        <!-- Column 2: Client Pipeline CRM -->
-        <section class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 backdrop-blur-md">
-            <h2 class="text-lg font-bold text-white mb-4">Client Pipeline</h2>
-            <div id="crmList" class="space-y-3">
-                <!-- CRM leads will load here dynamically -->
-            </div>
-        </section>
-
-        <!-- Column 3: Quick Finance & Metrics -->
-        <section class="space-y-6">
-            <!-- Finance Tracker Card -->
-            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6 backdrop-blur-md">
-                <h2 class="text-lg font-bold text-white mb-4">Revenue & Expenses</h2>
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div class="bg-emerald-950/20 border border-emerald-900/30 p-4 rounded-xl">
-                        <span class="text-xs text-emerald-400 uppercase font-bold tracking-wider">Revenue</span>
-                        <div class="text-2xl font-bold mt-1 text-emerald-400">$<span id="revDisplay">0</span></div>
-                    </div>
-                    <div class="bg-rose-950/20 border border-rose-900/30 p-4 rounded-xl">
-                        <span class="text-xs text-rose-400 uppercase font-bold tracking-wider">Expenses</span>
-                        <div class="text-2xl font-bold mt-1 text-rose-400">$<span id="expDisplay">0</span></div>
-                    </div>
+            
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100">
+                    <span class="text-xs text-emerald-700 font-medium">Total Income</span>
+                    <p class="text-lg font-bold text-emerald-800 mt-1" id="total-income">KES 0</p>
                 </div>
-                <button onclick="openModal('financeModal')" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 rounded-xl font-medium text-sm transition-all">
-                    Log Transaction
+                <div class="bg-rose-50 p-3 rounded-xl border border-rose-100">
+                    <span class="text-xs text-rose-700 font-medium">Total Expenses</span>
+                    <p class="text-lg font-bold text-rose-800 mt-1" id="total-expenses">KES 0</p>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 mb-4 flex justify-between items-center">
+                <span class="text-sm font-semibold text-slate-600">Net Balance:</span>
+                <span class="text-xl font-extrabold text-blue-700" id="net-balance">KES 0</span>
+            </div>
+
+            <div class="space-y-2">
+                <div class="flex gap-2">
+                    <input type="number" id="tx-amount" placeholder="Amount (KES)" class="w-1/2 px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select id="tx-type" class="w-1/2 px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="income">Income (+)</option>
+                        <option value="expense">Expense (-)</option>
+                    </select>
+                </div>
+                <input type="text" id="tx-desc" placeholder="Description (e.g., Fuel, Fare)" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button onclick="addTransaction()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-semibold transition-colors">
+                    Add Transaction
                 </button>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold flex items-center gap-2">
+                    <i data-lucide="users" class="text-blue-600 w-5 h-5"></i>
+                    Client Pipeline
+                </h2>
+                <button onclick="toggleClientModal()" class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-colors">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Add Client
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                        <span class="w-2.5 h-2.5 bg-amber-400 rounded-full"></span> Leads
+                    </h3>
+                    <div id="leads-list" class="space-y-2 min-h-[50px] bg-slate-50 p-2 rounded-xl border border-dashed border-slate-200">
+                        </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                        <span class="w-2.5 h-2.5 bg-blue-500 rounded-full"></span> Active
+                    </h3>
+                    <div id="active-list" class="space-y-2 min-h-[50px] bg-slate-50 p-2 rounded-xl border border-dashed border-slate-200">
+                        </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                        <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span> Completed
+                    </h3>
+                    <div id="completed-list" class="space-y-2 min-h-[50px] bg-slate-50 p-2 rounded-xl border border-dashed border-slate-200">
+                        </div>
+                </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Dialog Modals (Hidden by default) -->
-    <!-- Task Modal -->
-    <div id="taskModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl w-full max-w-md">
-            <h3 class="text-xl font-bold text-white mb-4">Add Focus Task</h3>
-            <input id="taskInput" type="text" placeholder="What needs to get done?" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-emerald-500 mb-4">
-            <div class="flex justify-end gap-3">
-                <button onclick="closeModal('taskModal')" class="px-4 py-2 text-slate-400 hover:text-white text-sm">Cancel</button>
-                <button onclick="addTask()" class="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-4 py-2 rounded-lg text-sm">Add Task</button>
+    <div id="client-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl w-full max-w-sm p-5 shadow-xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-md font-bold">New Client Lead</h3>
+                <button onclick="toggleClientModal()" class="text-slate-400 hover:text-slate-600">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <input type="text" id="client-name" placeholder="Client Name" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="text" id="client-route" placeholder="Route (e.g. Town to Airport)" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="number" id="client-quote" placeholder="Quoted Fare (KES)" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button onclick="saveClient()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-semibold transition-colors mt-2">
+                    Add to Pipeline
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Javascript Logical Wiring -->
     <script>
-        // State controllers & storage utilities
-        let tasks = JSON.parse(localStorage.getItem('solo_tasks')) || [];
-        let leads = JSON.parse(localStorage.getItem('solo_leads')) || [];
-        let financials = JSON.parse(localStorage.getItem('solo_fin')) || { rev: 0, exp: 0 };
+        // Initialize Lucide Icons
+        lucide.createIcons();
 
-        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+        // Application State
+        let state = {
+            transactions: JSON.parse(localStorage.getItem('sr_transactions')) || [],
+            clients: JSON.parse(localStorage.getItem('sr_clients')) || []
+        };
 
-        function renderTasks() {
-            const list = document.getElementById('taskList');
-            list.innerHTML = '';
-            document.getElementById('taskCount').innerText = `${tasks.length} Active`;
-            
-            if (tasks.length === 0) {
-                list.innerHTML = `<p class="text-slate-500 text-sm py-4 text-center">All clear! Add a task to start your focus session.</p>`;
+        // Save State to LocalStorage
+        function saveState() {
+            localStorage.setItem('sr_transactions', JSON.stringify(state.transactions));
+            localStorage.setItem('sr_clients', JSON.stringify(state.clients));
+            render();
+        }
+
+        // --- Financial Tracker Logic ---
+        function addTransaction() {
+            const amountInput = document.getElementById('tx-amount');
+            const typeInput = document.getElementById('tx-type');
+            const descInput = document.getElementById('tx-desc');
+
+            const amount = parseFloat(amountInput.value);
+            const type = typeInput.value;
+            const desc = descInput.value.trim();
+
+            if (isNaN(amount) || amount <= 0 || !desc) {
+                alert("Please fill in all transaction details correctly.");
                 return;
             }
 
-            tasks.forEach((task, index) => {
-                list.innerHTML += `
-                    <div class="flex items-center justify-between p-3.5 bg-slate-950/40 border border-slate-800/60 rounded-xl">
-                        <span class="text-sm text-slate-300 font-medium">${task}</span>
-                        <button onclick="deleteTask(${index})" class="text-xs text-rose-400 hover:text-rose-300 font-medium">Done</button>
-                    </div>
-                `;
-            });
+            state.transactions.push({ id: Date.now(), amount, type, desc });
+            
+            // Reset inputs
+            amountInput.value = '';
+            descInput.value = '';
+            
+            saveState();
         }
 
-        function addTask() {
-            const val = document.getElementById('taskInput').value.trim();
-            if(val) {
-                tasks.push(val);
-                localStorage.setItem('solo_tasks', JSON.stringify(tasks));
-                document.getElementById('taskInput').value = '';
-                closeModal('taskModal');
-                renderTasks();
+        function calculateFinances() {
+            let income = 0;
+            let expenses = 0;
+
+            state.transactions.forEach(tx => {
+                if (tx.type === 'income') income += tx.amount;
+                if (tx.type === 'expense') expenses += tx.amount;
+            });
+
+            document.getElementById('total-income').innerText = `KES ${income.toLocaleString()}`;
+            document.getElementById('total-expenses').innerText = `KES ${expenses.toLocaleString()}`;
+            document.getElementById('net-balance').innerText = `KES ${(income - expenses).toLocaleString()}`;
+        }
+
+        // --- CRM Logic ---
+        function toggleClientModal() {
+            const modal = document.getElementById('client-modal');
+            modal.classList.toggle('hidden');
+            modal.classList.toggle('flex');
+        }
+
+        function saveClient() {
+            const name = document.getElementById('client-name').value.trim();
+            const route = document.getElementById('client-route').value.trim();
+            const quote = parseFloat(document.getElementById('client-quote').value);
+
+            if (!name || !route || isNaN(quote)) {
+                alert("Please fill in all client details.");
+                return;
+            }
+
+            state.clients.push({
+                id: Date.now(),
+                name,
+                route,
+                quote,
+                status: 'lead' // Default status
+            });
+
+            // Reset inputs & close modal
+            document.getElementById('client-name').value = '';
+            document.getElementById('client-route').value = '';
+            document.getElementById('client-quote').value = '';
+            toggleClientModal();
+
+            saveState();
+        }
+
+        function moveClient(id, newStatus) {
+            state.clients = state.clients.map(client => {
+                if (client.id === id) {
+                    client.status = newStatus;
+                }
+                return client;
+            });
+            saveState();
+        }
+
+        function deleteClient(id) {
+            if (confirm("Remove this client from the pipeline?")) {
+                state.clients = state.clients.filter(client => client.id !== id);
+                saveState();
             }
         }
 
-        function deleteTask(index) {
-            tasks.splice(index, 1);
-            localStorage.setItem('solo_tasks', JSON.stringify(tasks));
-            renderTasks();
+        // --- Render UI ---
+        function render() {
+            calculateFinances();
+
+            const leadsContainer = document.getElementById('leads-list');
+            const activeContainer = document.getElementById('active-list');
+            const completedContainer = document.getElementById('completed-list');
+
+            leadsContainer.innerHTML = '';
+            activeContainer.innerHTML = '';
+            completedContainer.innerHTML = '';
+
+            state.clients.forEach(client => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-3 rounded-lg border border-slate-200 shadow-sm space-y-2 text-xs relative";
+                
+                // Set Up Action Buttons depending on status
+                let actionButtons = '';
+                if (client.status === 'lead') {
+                    actionButtons = `<button onclick="moveClient(${client.id}, 'active')" class="text-blue-600 font-bold hover:underline">Start Trip &rarr;</button>`;
+                } else if (client.status === 'active') {
+                    actionButtons = `<button onclick="moveClient(${client.id}, 'completed')" class="text-emerald-600 font-bold hover:underline">Complete &check;</button>`;
+                } else if (client.status === 'completed') {
+                    actionButtons = `<span class="text-slate-400 font-medium">Job Saved</span>`;
+                }
+
+                card.innerHTML = `
+                    <button onclick="deleteClient(${client.id})" class="absolute top-2 right-2 text-slate-400 hover:text-rose-500">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <div>
+                        <p class="font-bold text-sm text-slate-800">${client.name}</p>
+                        <p class="text-slate-500">${client.route}</p>
+                    </div>
+                    <div class="flex justify-between items-center pt-2 border-t border-slate-100">
+                        <span class="font-semibold text-slate-700">KES ${client.quote.toLocaleString()}</span>
+                        ${actionButtons}
+                    </div>
+                `;
+
+                if (client.status === 'lead') leadsContainer.appendChild(card);
+                if (client.status === 'active') activeContainer.appendChild(card);
+                if (client.status === 'completed') completedContainer.appendChild(card);
+            });
+
+            // Re-render fresh Lucide Icons in the newly injected HTML
+            lucide.createIcons();
         }
 
-        // Initial setup run
-        renderTasks();
+        // Initial Page Load Render
+        render();
     </script>
 </body>
 </html>
