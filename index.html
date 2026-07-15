@@ -3,114 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shupavu Ride - Partner Dashboard</title>
+    <title>SoloHub OS - Business Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans pb-12">
+<body class="bg-slate-50 text-slate-800 font-sans">
 
-    <header class="bg-blue-600 text-white shadow-md sticky top-0 z-10">
-        <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white shadow-md">
+        <div class="max-w-md mx-auto px-4 py-4 flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <i data-lucide="steering-wheel" class="w-6 h-6"></i>
-                <span class="font-bold text-lg tracking-wide">Shupavu Ride</span>
+                <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
+                <span class="font-bold text-lg">SoloHub OS</span>
             </div>
-            <span class="bg-blue-500 text-xs px-2 py-1 rounded-full font-semibold">Partner Panel</span>
+            <span class="bg-blue-500 text-xs px-2 py-1 rounded">Kiosk Mode</span>
         </div>
     </header>
 
-    <main class="max-w-md mx-auto px-4 mt-6 space-y-6">
+    <!-- Main Container -->
+    <main class="max-w-md mx-auto px-4 py-6 space-y-6">
 
-        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-            <h2 class="text-lg font-bold flex items-center gap-2 mb-4">
-                <i data-lucide="wallet" class="text-blue-600 w-5 h-5"></i>
-                Financial Tracker
-            </h2>
+        <!-- Financial Tracker Card -->
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 space-y-4">
+            <div class="flex items-center gap-2 text-slate-500">
+                <i data-lucide="wallet" class="w-5 h-5"></i>
+                <h2 class="text-sm font-semibold uppercase tracking-wider">Financial Tracker</h2>
+            </div>
             
-            <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="grid grid-cols-2 gap-4">
                 <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100">
-                    <span class="text-xs text-emerald-700 font-medium">Total Income</span>
-                    <p class="text-lg font-bold text-emerald-800 mt-1" id="total-income">KES 0</p>
+                    <p class="text-xs text-emerald-600 font-medium">Total Income</p>
+                    <p id="totalIncome" class="text-lg font-bold text-emerald-700">KES 0</p>
                 </div>
                 <div class="bg-rose-50 p-3 rounded-xl border border-rose-100">
-                    <span class="text-xs text-rose-700 font-medium">Total Expenses</span>
-                    <p class="text-lg font-bold text-rose-800 mt-1" id="total-expenses">KES 0</p>
+                    <p class="text-xs text-rose-600 font-medium">Total Expenses</p>
+                    <p id="totalExpenses" class="text-lg font-bold text-rose-700">KES 0</p>
                 </div>
             </div>
 
-            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 mb-4 flex justify-between items-center">
-                <span class="text-sm font-semibold text-slate-600">Net Balance:</span>
-                <span class="text-xl font-extrabold text-blue-700" id="net-balance">KES 0</span>
+            <div class="pt-2 border-t border-slate-100 flex justify-between items-center">
+                <span class="text-sm font-medium text-slate-500">Net Balance:</span>
+                <span id="netBalance" class="text-xl font-extrabold text-slate-900">KES 0</span>
             </div>
 
-            <div class="space-y-2">
+            <!-- Add Transaction Form -->
+            <div class="space-y-3 pt-2">
                 <div class="flex gap-2">
-                    <input type="number" id="tx-amount" placeholder="Amount (KES)" class="w-1/2 px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <select id="tx-type" class="w-1/2 px-3 py-2 border border-slate-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="number" id="txAmount" placeholder="Amount (KES)" class="w-1/2 px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                    <select id="txType" class="w-1/2 px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white">
                         <option value="income">Income (+)</option>
                         <option value="expense">Expense (-)</option>
                     </select>
                 </div>
-                <input type="text" id="tx-desc" placeholder="Description (e.g., Fuel, Fare)" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button onclick="addTransaction()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-semibold transition-colors">
+                <input type="text" id="txDesc" placeholder="Description (e.g., Stock, Sale, Rent)" class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                <button onclick="addTransaction()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-xl transition duration-200 text-sm">
                     Add Transaction
                 </button>
             </div>
         </section>
 
-        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-bold flex items-center gap-2">
-                    <i data-lucide="users" class="text-blue-600 w-5 h-5"></i>
-                    Client Pipeline
-                </h2>
-                <button onclick="toggleClientModal()" class="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 transition-colors">
-                    <i data-lucide="plus" class="w-4 h-4"></i> Add Client
+        <!-- Sales & Customer Pipeline -->
+        <section class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 space-y-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2 text-slate-500">
+                    <i data-lucide="users" class="w-5 h-5"></i>
+                    <h2 class="text-sm font-semibold uppercase tracking-wider">Sales Pipeline</h2>
+                </div>
+                <button onclick="toggleModal(true)" class="text-blue-600 hover:text-blue-700 font-semibold text-xs flex items-center gap-1">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Add Deal
                 </button>
             </div>
 
-            <div class="space-y-4">
+            <!-- Pipeline Swimlanes -->
+            <div class="space-y-6">
+                <!-- Pending/New Orders -->
                 <div>
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                        <span class="w-2.5 h-2.5 bg-amber-400 rounded-full"></span> Leads
+                    <h3 class="text-xs font-bold text-amber-600 uppercase mb-2 flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span> Pending / New
                     </h3>
-                    <div id="leads-list" class="space-y-2 min-h-[50px] bg-slate-50 p-2 rounded-xl border border-dashed border-slate-200">
-                        </div>
+                    <div id="pendingPipeline" class="space-y-2">
+                        <!-- Dynamic content -->
+                    </div>
                 </div>
 
+                <!-- Completed Sales -->
                 <div>
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                        <span class="w-2.5 h-2.5 bg-blue-500 rounded-full"></span> Active
+                    <h3 class="text-xs font-bold text-emerald-600 uppercase mb-2 flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Completed
                     </h3>
-                    <div id="active-list" class="space-y-2 min-h-[50px] bg-slate-50 p-2 rounded-xl border border-dashed border-slate-200">
-                        </div>
-                </div>
-
-                <div>
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1">
-                        <span class="w-2.5 h-2.5 bg-emerald-500 rounded-full"></span> Completed
-                    </h3>
-                    <div id="completed-list" class="space-y-2 min-h-[50px] bg-slate-50 p-2 rounded-xl border border-dashed border-slate-200">
-                        </div>
+                    <div id="completedPipeline" class="space-y-2">
+                        <!-- Dynamic content -->
+                    </div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <div id="client-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl w-full max-w-sm p-5 shadow-xl">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-md font-bold">New Client Lead</h3>
-                <button onclick="toggleClientModal()" class="text-slate-400 hover:text-slate-600">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
+    <!-- Modal for New Deal -->
+    <div id="dealModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl p-5 w-full max-w-sm space-y-4 relative">
+            <button onclick="toggleModal(false)" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h3 class="text-base font-bold text-slate-800">New Client / Deal</h3>
             <div class="space-y-3">
-                <input type="text" id="client-name" placeholder="Client Name" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <input type="text" id="client-route" placeholder="Route (e.g. Town to Airport)" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <input type="number" id="client-quote" placeholder="Quoted Fare (KES)" class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button onclick="saveClient()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg text-sm font-semibold transition-colors mt-2">
+                <input type="text" id="dealName" placeholder="Client Name" class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                <input type="text" id="dealDetails" placeholder="Items / Service details" class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                <input type="number" id="dealValue" placeholder="Deal Value (KES)" class="w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                <button onclick="addDeal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-xl transition duration-200 text-sm">
                     Add to Pipeline
                 </button>
             </div>
@@ -118,162 +119,163 @@
     </div>
 
     <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
+        // Data States
+        let transactions = JSON.parse(localStorage.getItem('solo_txs')) || [];
+        let pipeline = JSON.parse(localStorage.getItem('solo_pipeline')) || [];
 
-        // Application State
-        let state = {
-            transactions: JSON.parse(localStorage.getItem('sr_transactions')) || [],
-            clients: JSON.parse(localStorage.getItem('sr_clients')) || []
-        };
-
-        // Save State to LocalStorage
-        function saveState() {
-            localStorage.setItem('sr_transactions', JSON.stringify(state.transactions));
-            localStorage.setItem('sr_clients', JSON.stringify(state.clients));
-            render();
+        // Save & Render Helpers
+        function saveData() {
+            localStorage.setItem('solo_txs', JSON.stringify(transactions));
+            localStorage.setItem('solo_pipeline', JSON.stringify(pipeline));
+            renderAll();
         }
 
-        // --- Financial Tracker Logic ---
-        function addTransaction() {
-            const amountInput = document.getElementById('tx-amount');
-            const typeInput = document.getElementById('tx-type');
-            const descInput = document.getElementById('tx-desc');
+        function toggleModal(show) {
+            document.getElementById('dealModal').classList.toggle('hidden', !show);
+        }
 
-            const amount = parseFloat(amountInput.value);
-            const type = typeInput.value;
+        // Transactions Management
+        function addTransaction() {
+            const amountInput = document.getElementById('txAmount');
+            const typeInput = document.getElementById('txType');
+            const descInput = document.getElementById('txDesc');
+
+            const val = parseFloat(amountInput.value);
             const desc = descInput.value.trim();
 
-            if (isNaN(amount) || amount <= 0 || !desc) {
-                alert("Please fill in all transaction details correctly.");
+            if (!val || !desc) {
+                alert("Please fill in all transaction fields correctly.");
                 return;
             }
 
-            state.transactions.push({ id: Date.now(), amount, type, desc });
-            
-            // Reset inputs
+            transactions.push({
+                id: Date.now(),
+                amount: val,
+                type: typeInput.value,
+                description: desc,
+                date: new Date().toLocaleDateString()
+            });
+
             amountInput.value = '';
             descInput.value = '';
-            
-            saveState();
+            saveData();
         }
 
-        function calculateFinances() {
-            let income = 0;
-            let expenses = 0;
+        // Pipeline Management
+        function addDeal() {
+            const name = document.getElementById('dealName').value.trim();
+            const details = document.getElementById('dealDetails').value.trim();
+            const value = parseFloat(document.getElementById('dealValue').value);
 
-            state.transactions.forEach(tx => {
-                if (tx.type === 'income') income += tx.amount;
-                if (tx.type === 'expense') expenses += tx.amount;
-            });
-
-            document.getElementById('total-income').innerText = `KES ${income.toLocaleString()}`;
-            document.getElementById('total-expenses').innerText = `KES ${expenses.toLocaleString()}`;
-            document.getElementById('net-balance').innerText = `KES ${(income - expenses).toLocaleString()}`;
-        }
-
-        // --- CRM Logic ---
-        function toggleClientModal() {
-            const modal = document.getElementById('client-modal');
-            modal.classList.toggle('hidden');
-            modal.classList.toggle('flex');
-        }
-
-        function saveClient() {
-            const name = document.getElementById('client-name').value.trim();
-            const route = document.getElementById('client-route').value.trim();
-            const quote = parseFloat(document.getElementById('client-quote').value);
-
-            if (!name || !route || isNaN(quote)) {
-                alert("Please fill in all client details.");
+            if (!name || !details || !value) {
+                alert("Please complete all deal details.");
                 return;
             }
 
-            state.clients.push({
+            pipeline.push({
                 id: Date.now(),
-                name,
-                route,
-                quote,
-                status: 'lead' // Default status
+                name: name,
+                details: details,
+                value: value,
+                status: 'pending'
             });
 
-            // Reset inputs & close modal
-            document.getElementById('client-name').value = '';
-            document.getElementById('client-route').value = '';
-            document.getElementById('client-quote').value = '';
-            toggleClientModal();
-
-            saveState();
+            document.getElementById('dealName').value = '';
+            document.getElementById('dealDetails').value = '';
+            document.getElementById('dealValue').value = '';
+            toggleModal(false);
+            saveData();
         }
 
-        function moveClient(id, newStatus) {
-            state.clients = state.clients.map(client => {
-                if (client.id === id) {
-                    client.status = newStatus;
-                }
-                return client;
-            });
-            saveState();
-        }
+        function completeDeal(id) {
+            const dealIndex = pipeline.findIndex(d => d.id === id);
+            if (dealIndex > -1) {
+                const deal = pipeline[dealIndex];
+                deal.status = 'completed';
+                
+                // Automatically register the income
+                transactions.push({
+                    id: Date.now(),
+                    amount: deal.value,
+                    type: 'income',
+                    description: `Paid: ${deal.name} - ${deal.details}`,
+                    date: new Date().toLocaleDateString()
+                });
 
-        function deleteClient(id) {
-            if (confirm("Remove this client from the pipeline?")) {
-                state.clients = state.clients.filter(client => client.id !== id);
-                saveState();
+                saveData();
             }
         }
 
-        // --- Render UI ---
-        function render() {
-            calculateFinances();
+        function deleteDeal(id) {
+            pipeline = pipeline.filter(d => d.id !== id);
+            saveData();
+        }
 
-            const leadsContainer = document.getElementById('leads-list');
-            const activeContainer = document.getElementById('active-list');
-            const completedContainer = document.getElementById('completed-list');
+        // Global Render
+        function renderAll() {
+            // Render Finances
+            let incomeTotal = 0;
+            let expenseTotal = 0;
 
-            leadsContainer.innerHTML = '';
-            activeContainer.innerHTML = '';
-            completedContainer.innerHTML = '';
-
-            state.clients.forEach(client => {
-                const card = document.createElement('div');
-                card.className = "bg-white p-3 rounded-lg border border-slate-200 shadow-sm space-y-2 text-xs relative";
-                
-                // Set Up Action Buttons depending on status
-                let actionButtons = '';
-                if (client.status === 'lead') {
-                    actionButtons = `<button onclick="moveClient(${client.id}, 'active')" class="text-blue-600 font-bold hover:underline">Start Trip &rarr;</button>`;
-                } else if (client.status === 'active') {
-                    actionButtons = `<button onclick="moveClient(${client.id}, 'completed')" class="text-emerald-600 font-bold hover:underline">Complete &check;</button>`;
-                } else if (client.status === 'completed') {
-                    actionButtons = `<span class="text-slate-400 font-medium">Job Saved</span>`;
-                }
-
-                card.innerHTML = `
-                    <button onclick="deleteClient(${client.id})" class="absolute top-2 right-2 text-slate-400 hover:text-rose-500">
-                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                    </button>
-                    <div>
-                        <p class="font-bold text-sm text-slate-800">${client.name}</p>
-                        <p class="text-slate-500">${client.route}</p>
-                    </div>
-                    <div class="flex justify-between items-center pt-2 border-t border-slate-100">
-                        <span class="font-semibold text-slate-700">KES ${client.quote.toLocaleString()}</span>
-                        ${actionButtons}
-                    </div>
-                `;
-
-                if (client.status === 'lead') leadsContainer.appendChild(card);
-                if (client.status === 'active') activeContainer.appendChild(card);
-                if (client.status === 'completed') completedContainer.appendChild(card);
+            transactions.forEach(t => {
+                if (t.type === 'income') incomeTotal += t.amount;
+                else expenseTotal += t.amount;
             });
 
-            // Re-render fresh Lucide Icons in the newly injected HTML
+            const net = incomeTotal - expenseTotal;
+
+            document.getElementById('totalIncome').innerText = `KES ${incomeTotal.toLocaleString()}`;
+            document.getElementById('totalExpenses').innerText = `KES ${expenseTotal.toLocaleString()}`;
+            document.getElementById('netBalance').innerText = `KES ${net.toLocaleString()}`;
+
+            // Render Pipeline
+            const pendingDiv = document.getElementById('pendingPipeline');
+            const completedDiv = document.getElementById('completedPipeline');
+
+            pendingDiv.innerHTML = '';
+            completedDiv.innerHTML = '';
+
+            pipeline.forEach(deal => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-50 border border-slate-100 rounded-xl p-3 flex justify-between items-center";
+                
+                if (deal.status === 'pending') {
+                    card.innerHTML = `
+                        <div>
+                            <p class="text-sm font-bold text-slate-800">${deal.name}</p>
+                            <p class="text-xs text-slate-500">${deal.details}</p>
+                            <p class="text-xs font-semibold text-blue-600 mt-1">KES ${deal.value.toLocaleString()}</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="completeDeal(${deal.id})" class="bg-emerald-600 text-white text-xs px-3 py-1.5 rounded-lg font-medium hover:bg-emerald-700 transition">
+                                Complete
+                            </button>
+                            <button onclick="deleteDeal(${deal.id})" class="text-slate-400 hover:text-rose-600 p-1">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    `;
+                    pendingDiv.appendChild(card);
+                } else {
+                    card.innerHTML = `
+                        <div>
+                            <p class="text-sm font-semibold text-slate-700 line-through">${deal.name}</p>
+                            <p class="text-xs text-slate-400">${deal.details}</p>
+                            <p class="text-xs font-semibold text-emerald-600 mt-1">KES ${deal.value.toLocaleString()}</p>
+                        </div>
+                        <span class="text-emerald-600 text-xs font-bold bg-emerald-50 px-2 py-1 rounded">Paid</span>
+                    `;
+                    completedDiv.appendChild(card);
+                }
+            });
+
+            // Re-ender icons
             lucide.createIcons();
         }
 
-        // Initial Page Load Render
-        render();
+        // Initial Boot
+        window.onload = renderAll;
     </script>
 </body>
 </html>
+￼Enter
