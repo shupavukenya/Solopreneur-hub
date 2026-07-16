@@ -3,382 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoloHub OS - Dashboard & Payments</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
-        body {
-            background-color: #0B0F19;
-            color: #E2E8F0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-    </style>
+    <title>Pipeline & Payment Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="p-4 md:p-8">
+<body class="bg-gray-100 font-sans antialiased">
 
-    <div class="max-w-md mx-auto space-y-6">
-        
-        <!-- Header -->
-        <div class="flex justify-between items-center bg-[#1E293B] p-4 rounded-xl shadow-lg border border-[#334155]">
-            <div class="flex items-center gap-2">
-                <span class="text-xl">📊</span>
-                <h1 class="text-lg font-bold text-white tracking-wide">SoloHub OS</h1>
-            </div>
-            <span class="bg-[#007BFF] text-xs font-semibold px-2.5 py-1 rounded text-white tracking-wider">Kiosk Mode</span>
+    <div class="max-w-4xl mx-auto p-6">
+        <header class="mb-8 text-center">
+            <h1 class="text-3xl font-bold text-gray-800">Deal Management Portal</h1>
+            <p class="text-gray-600">Add new deals and process secure payments via PesaPal</p>
+        </header>
+
+        <div class="flex justify-end mb-6">
+            <button onclick="openDealModal()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2px px-6 rounded-lg shadow transition">
+                + New Deal
+            </button>
         </div>
 
-        <!-- Financial Tracker Card -->
-        <div class="bg-[#1E293B] p-5 rounded-xl shadow-xl border border-[#334155] space-y-4">
-            <div class="flex items-center gap-2 pb-2 border-b border-[#334155]">
-                <span class="text-sm opacity-80">📁</span>
-                <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400">Financial Tracker</h2>
-            </div>
-            
-            <!-- Summary Grid -->
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-[#111827] p-3 rounded-lg border border-emerald-500/20">
-                    <p class="text-xs text-slate-400 font-medium">Total Income</p>
-                    <p id="total-income" class="text-lg font-bold text-emerald-400 mt-1">KES 140,000</p>
-                </div>
-                <div class="bg-[#111827] p-3 rounded-lg border border-rose-500/20">
-                    <p class="text-xs text-slate-400 font-medium">Total Expenses</p>
-                    <p id="total-expenses" class="text-lg font-bold text-rose-400 mt-1">KES 0</p>
-                </div>
-            </div>
-
-            <!-- Net Balance -->
-            <div class="bg-[#111827] p-4 rounded-lg flex justify-between items-center border border-blue-500/20">
-                <span class="text-sm font-medium text-slate-300">Net Balance:</span>
-                <span id="net-balance" class="text-xl font-extrabold text-blue-400">KES 140,000</span>
-            </div>
-
-            <!-- Optional Manual Add Transaction (Collapsible/Optional) -->
-            <details class="group bg-[#111827] rounded-lg border border-[#334155]">
-                <summary class="list-none flex justify-between items-center p-3 cursor-pointer text-xs font-semibold uppercase tracking-wider text-slate-400 select-none">
-                    <span>➕ Optional Transaction</span>
-                    <span class="transition group-open:rotate-180 text-sm">▼</span>
-                </summary>
-                <div class="p-3 pt-0 space-y-3">
-                    <input type="number" id="manual-amount" placeholder="Amount (KES)" class="w-full bg-[#1F2937] border border-[#374151] rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    <select id="manual-type" class="w-full bg-[#1F2937] border border-[#374151] rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                        <option value="income">Income (+)</option>
-                        <option value="expense">Expense (-)</option>
-                    </select>
-                    <input type="text" id="manual-desc" placeholder="Description (e.g., Stock, Sale, Rent)" class="w-full bg-[#1F2937] border border-[#374151] rounded p-2 text-sm text-white focus:outline-none focus:border-blue-500">
-                    <button onclick="handleManualTransaction()" class="w-full bg-[#007BFF] hover:bg-blue-600 font-semibold text-white p-2 rounded text-sm transition-colors shadow">Add Transaction</button>
-                </div>
-            </details>
-        </div>
-
-        <!-- Sales Pipeline Card -->
-        <div class="bg-[#1E293B] p-5 rounded-xl shadow-xl border border-[#334155] space-y-4">
-            <div class="flex justify-between items-center pb-2 border-b border-[#334155]">
-                <div class="flex items-center gap-2">
-                    <span class="text-sm opacity-80">👥</span>
-                    <h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400">Sales Pipeline</h2>
-                </div>
-                <button onclick="openModal()" class="text-xs bg-[#007BFF] hover:bg-blue-600 text-white font-bold px-3 py-1.5 rounded transition-colors flex items-center gap-1 shadow">
-                    <span>➕</span> Add Deal
-                </button>
-            </div>
-
-            <!-- Pipeline Sections -->
-            <div class="space-y-4">
-                <!-- Pending/New Section -->
-                <div>
-                    <h3 class="text-xs font-bold text-amber-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-amber-400 block animate-pulse"></span> Pending / New
-                    </h3>
-                    <div id="pending-list" class="space-y-2">
-                        <!-- Dynamic items land here -->
-                    </div>
-                </div>
-
-                <!-- Completed Section -->
-                <div>
-                    <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-2 flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 block"></span> Completed
-                    </h3>
-                    <div id="completed-list" class="space-y-2">
-                        <!-- Initial Preloaded Paid Deal -->
-                        <div class="bg-[#111827] p-3 rounded-lg border border-emerald-500/20 flex justify-between items-center">
-                            <div>
-                                <p class="text-sm font-bold text-white">Ruto</p>
-                                <p class="text-xs text-slate-400">Goods</p>
-                                <p class="text-xs text-emerald-400 font-semibold mt-1">KES 70,000</p>
-                            </div>
-                            <span class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2.5 py-1 rounded border border-emerald-500/20">Paid</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Sandbox Integration Status Logger -->
-        <div class="bg-[#111827] p-4 rounded-xl border border-[#334155] space-y-2">
-            <p class="text-xs uppercase font-bold text-slate-400 tracking-wider">PesaPal Sandbox Logger</p>
-            <div id="log-box" class="text-[11px] font-mono bg-black/40 text-slate-300 p-2.5 rounded max-h-[140px] overflow-y-auto whitespace-pre-wrap leading-relaxed">System ready to test registrations...</div>
-        </div>
-
-    </div>
-
-    <!-- Modal Form: Add Deal & Initiate Automated Pay Flow -->
-    <div id="deal-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-        <div class="bg-[#1E293B] w-full max-w-sm rounded-xl border border-[#334155] overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-150">
-            <div class="bg-[#111827] px-4 py-3 border-b border-[#334155] flex justify-between items-center">
-                <h3 class="font-bold text-sm tracking-wide text-white">New Client / Deal</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white text-lg font-bold">×</button>
-            </div>
-            <div class="p-4 space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1 tracking-wider">Client Name</label>
-                    <input type="text" id="deal-name" placeholder="e.g. Job" class="w-full bg-[#111827] border border-[#374151] rounded p-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1 tracking-wider">Items / Service details</label>
-                    <input type="text" id="deal-items" placeholder="e.g. Shopping" class="w-full bg-[#111827] border border-[#374151] rounded p-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1 tracking-wider">Deal Value (KES)</label>
-                    <input type="number" id="deal-value" placeholder="e.g. 70000" class="w-full bg-[#111827] border border-[#374151] rounded p-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-400 uppercase mb-1 tracking-wider">Client Email (For PesaPal Verification)</label>
-                    <input type="email" id="deal-email" value="testcustomer@domain.com" class="w-full bg-[#111827] border border-[#374151] rounded p-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
-                </div>
-                <div>
-                <div class="mb-4">
-    <label class="block text-xs font-semibold text-gray-400 mb-1">Phone Number</label>
-    <input type="text" id="customerPhone" placeholder="Enter phone number" class="w-full p-3 bg-[#111827] border border-[#374151] rounded-lg text-white text-xs focus:ring-1 focus:ring-[#007BFF] outline-none transition-all">
-                </div>
-                    
-
-                
-                <button id="submit-deal-btn" onclick="submitPipelineDeal()" class="w-full bg-[#007BFF] hover:bg-blue-600 font-bold text-white py-3 rounded-lg text-sm tracking-wide transition-colors shadow-lg mt-2">
-                    Add to Pipeline & Pay
-                </button>
+        <div class="bg-white p-6 rounded-xl shadow">
+            <h2 class="text-xl font-bold mb-4 text-gray-700">Active Pipeline</h2>
+            <div class="border-t border-gray-200 pt-4">
+                <p class="text-gray-500 text-center py-8">Your pipeline deals will appear here once submitted.</p>
             </div>
         </div>
     </div>
 
-    <!-- Core App Engine JavaScript Layout -->
-    <script>
-        // PesaPal API Integration SandBox Credentials
-        const CONSUMER_KEY = "qkio1BGGYaXtU2joFm7XSXNruoZsrqEW";
-        const CONSUMER_SECRET = "osQG364R49cXKeOYSpaonT++RHs=";
+    <div id="dealModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-xl shadow-lg w-full max-w-md mx-4 overflow-hidden">
+            <div class="bg-blue-600 px-6 py-4 flex justify-between items-center text-white">
+                <h3 class="text-lg font-semibold">Add New Deal & Pay</h3>
+                <button onclick="closeDealModal()" class="text-white hover:text-gray-200 text-xl font-bold">&times;</button>
+            </div>
 
-        // Core Financial Memory
-        let state = {
-            income: 140000,
-            expenses: 0,
-            deals: [
-                { id: 1, name: 'Ruto', items: 'Goods', value: 70000, status: 'completed' }
-            ]
-        };
+            <form id="dealForm" onsubmit="event.preventDefault();" class="p-6 space-y-4">
+                <div>
+                    <label for="dealName" class="block text-sm font-medium text-gray-700 mb-1">Deal Name</label>
+                    <input type="text" id="dealName" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                           placeholder="e.g., Shupavu Ride Partnership">
+                </div>
 
-        function logMessage(msg) {
-            const logBox = document.getElementById('log-box');
-            logBox.innerHTML += `\n> ${msg}`;
-            logBox.scrollTop = logBox.scrollHeight;
-        }
+                <div>
+                    <label for="customerName" class="block text-sm font-medium text-gray-700 mb-1">Customer Name</label>
+                    <input type="text" id="customerName" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                           placeholder="e.g., John Doe">
+                </div>
 
-        function updateUI() {
-            document.getElementById('total-income').innerText = `KES ${state.income.toLocaleString()}`;
-            document.getElementById('total-expenses').innerText = `KES ${state.expenses.toLocaleString()}`;
-            document.getElementById('net-balance').innerText = `KES ${(state.income - state.expenses).toLocaleString()}`;
+                <div>
+                    <label for="customerPhone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                    <input type="tel" id="customerPhone" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                           placeholder="e.g., +254712345678">
+                </div>
 
-            const pendingList = document.getElementById('pending-list');
-            const completedList = document.getElementById('completed-list');
+                <div>
+                    <label for="dealAmount" class="block text-sm font-medium text-gray-700 mb-1">Amount (KES)</label>
+                    <input type="number" id="dealAmount" required min="1" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                           placeholder="e.g., 5000">
+                </div>
 
-            pendingList.innerHTML = '';
-            completedList.innerHTML = `<!-- Persistent Base -->
-                <div class="bg-[#111827] p-3 rounded-lg border border-emerald-500/20 flex justify-between items-center">
-                    <div>
-                        <p class="text-sm font-bold text-white">Ruto</p>
-                        <p class="text-xs text-slate-400">Goods</p>
-                        <p class="text-xs text-emerald-400 font-semibold mt-1">KES 70,000</p>
-                    </div>
-                    <span class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2.5 py-1 rounded border border-emerald-500/20">Paid</span>
-                </div>`;
+                <div class="flex justify-end space-x-3 pt-4 border-t border-gray-100">
+                    <button type="button" onclick="closeDealModal()" 
+                            class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition">
+                        Cancel
+                    </button>
+                    <button type="button" onclick="submitPipelineAndPay()" 
+                            class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition">
+                        Add Deal & Pay
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-            state.deals.forEach(deal => {
-                if(deal.id === 1) return; // Skip base layout seed card
-
-                if(deal.status === 'pending') {
-                    pendingList.innerHTML += `
-                        <div id="deal-${deal.id}" class="bg-[#111827] p-3 rounded-lg border border-amber-500/20 flex justify-between items-center">
-                            <div>
-                                <p class="text-sm font-bold text-white">${deal.name}</p>
-                                <p class="text-xs text-slate-400">${deal.items}</p>
-                                <p class="text-xs text-amber-400 font-semibold mt-1">KES ${deal.value.toLocaleString()}</p>
-                            </div>
-                            <button onclick="executePesaPalPayment(${deal.id}, ${deal.value})" id="pay-btn-${deal.id}" class="bg-amber-500 hover:bg-amber-600 text-black text-xs font-bold px-3 py-1.5 rounded transition-all shadow">
-                                Pay Now
-                            </button>
-                        </div>`;
-                } else if(deal.status === 'completed') {
-                    completedList.innerHTML += `
-                        <div class="bg-[#111827] p-3 rounded-lg border border-emerald-500/20 flex justify-between items-center">
-                            <div>
-                                <p class="text-sm font-bold text-white">${deal.name}</p>
-                                <p class="text-xs text-slate-400">${deal.items}</p>
-                                <p class="text-xs text-emerald-400 font-semibold mt-1">KES ${deal.value.toLocaleString()}</p>
-                            </div>
-                            <span class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2.5 py-1 rounded border border-emerald-500/20">Paid</span>
-                        </div>`;
-                }
-            });
-        }
-
-        function openModal() { document.getElementById('deal-modal').classList.remove('hidden'); }
-        function closeModal() { document.getElementById('deal-modal').classList.add('hidden'); }
-
-        // Step 1: Create client as 'Pending / New' status inside pipeline
-        
-async function submitPipelineDeal() {
-    // 1. Grab the standard deal details
-    const dealName = document.getElementById('dealName').value;
-    const dealValue = parseFloat(document.getElementById('dealValue').value);
-    const dealItems = document.getElementById('dealItems').value;
-
-    // 2. Grab the new customer input fields for Pesapal
-    const firstName = document.getElementById('customerFirstName').value;
-    const lastName = document.getElementById('customerLastName').value;
-    const email = document.getElementById('customerEmail').value;
-    const phone = document.getElementById('customerPhone').value;
-
-    // Simple validation to ensure we have the required details
-    if (!dealName || isNaN(dealValue) || !email || !phone) {
-        alert("Please fill in all required fields (Deal Name, Value, Email, and Phone).");
-        return;
-    }
-
-    // 3. Create the new deal object with a 'Pending' payment status
-    const newDeal = {
-        name: dealName,
-        value: dealValue,
-        items: dealItems,
-        customer: {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            phone: phone
-        },
-        paymentStatus: 'Pending',
-        createdAt: new Date().toISOString()
-    };
-
-    console.log("Saving pending deal to pipeline...", newDeal);
-
-    try {
-        // 4. Save the pending deal to your database/backend
-        const response = await fetch/'submit-deal', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newDeal),
-        });
-
-        const savedDeal = await response.json();
-
-        if (response.ok) {
-            // 5. Trigger the next step: Initiate the Pesapal payment redirect
-            initiatePesapalPayment(savedDeal);
-        } else {
-            alert("Failed to save the deal: " + savedDeal.message);
-        }
-    } catch (error) {
-        console.error("Error creating pending deal:", error);
-        alert("An error occurred while saving the deal.");
-    }
-}
-
-        // Step 3: Call authentication API workflow simulation
-        async function executePesaPalPayment(dealId, value) {
-            const button = document.getElementById(`pay-btn-${dealId}`);
-            if(button) {
-                button.disabled = true;
-                button.innerText = "Processing...";
-            }
-
-            logMessage(`Contacting PesaPal API Gateway for transaction verification...`);
-
-            try {
-                // Fetch Auth Token API simulation step
-                const response = await fetch('https://cybqa.pesapal.com/pesapal3/api/Auth/RequestToken', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        "consumer_key": CONSUMER_KEY,
-                        "consumer_secret": CONSUMER_SECRET
-                    })
-                });
-
-                if (!response.ok) throw new Error(`Gateway returned error status: ${response.status}`);
-                const data = await response.json();
-
-                if (data.token) {
-                    logMessage(`Authentication Successful! Sandbox Token Generated: ${data.token.substring(0,24)}...`);
-                    
-                    // Success Simulation: Transaction complete -> shift node dynamically
-                    setTimeout(() => {
-                        completePipelinePayment(dealId, value);
-                    }, 1200);
-                } else {
-                    logMessage(`Authentication failed: Invalid credentials array.`);
-                    if(button) { button.disabled = false; button.innerText = "Pay Now"; }
-                }
-
-            } catch (error) {
-                logMessage(`Simulated Gateway bypass: API endpoint blocks client requests over CORS. Fallback routine verified.`);
-                // Overcoming CORS sandbox blocks locally: complete workflow process gracefully
-                setTimeout(() => {
-                    completePipelinePayment(dealId, value);
-                }, 1200);
-            }
-        }
-
-        // Step 4: Complete flow, convert node dynamically and run calculations safely
-        function completePipelinePayment(dealId, value) {
-            const dealIdx = state.deals.findIndex(d => d.id === dealId);
-            if(dealIdx !== -1) {
-                state.deals[dealIdx].status = 'completed';
-                state.income += value; // Adds to dashboard automatically
-                updateUI();
-                logMessage(`Payment execution verified successfully! Total Income increased by KES ${value.toLocaleString()}.`);
-            }
-        }
-
-        // Optional Top Widget Actions handling
-        function handleManualTransaction() {
-            const amount = parseFloat(document.getElementById('manual-amount').value);
-            const type = document.getElementById('manual-type').value;
-            const desc = document.getElementById('manual-desc').value.trim();
-
-            if (isNaN(amount) || amount <= 0) return alert("Enter a valid metric.");
-
-            if (type === 'income') {
-                state.income += amount;
-                logMessage(`Manual Income added: +KES ${amount}`);
-            } else {
-                state.expenses += amount;
-                logMessage(`Manual Expense added: -KES ${amount}`);
-            }
-            updateUI();
-            
-            document.getElementById('manual-amount').value = '';
-            document.getElementById('manual-desc').value = '';
-        }
-
-        // Initialize state on render
-        updateUI();
-    </script>
     <script src="pesapal.js"></script>
 
+    <script>
+        // Modal Control Functions
+        function openDealModal() {
+            document.getElementById('dealModal').classList.remove('hidden');
+        }
+
+        function closeDealModal() {
+            document.getElementById('dealModal').classList.add('hidden');
+            document.getElementById('dealForm').reset();
+        }
+
+        // Handles the Add Deal Form Submission
+        function submitPipelineAndPay() {
+            // Retrieve values safely using synchronized HTML IDs
+            const dealName = document.getElementById('dealName').value.trim();
+            const customerName = document.getElementById('customerName').value.trim();
+            const customerPhone = document.getElementById('customerPhone').value.trim();
+            const dealAmount = document.getElementById('dealAmount').value.trim();
+
+            // Simple validation check
+            if (!dealName || !customerName || !customerPhone || !dealAmount) {
+                alert("Please fill in all required fields before proceeding.");
+                return;
+            }
+
+            console.log("Submitting Deal Details:", { dealName, customerName, customerPhone, dealAmount });
+
+            // Package the data for processing
+            const paymentDetails = {
+                description: dealName,
+                name: customerName,
+                phone: customerPhone,
+                amount: parseFloat(dealAmount)
+            };
+
+            // Close the modal upon initiation
+            closeDealModal();
+
+            // Check if processPayment is defined in pesapal.js, then execute
+            if (typeof processPayment === "function") {
+                processPayment(paymentDetails);
+            } else {
+                console.error("Error: processPayment function not found in pesapal.js");
+                alert("Payment system initialization failed. Please check your console.");
+            }
+        }
+    </script>
 </body>
-</html>
-￼Enter
+                                                                                                            </html>
+    
